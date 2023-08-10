@@ -5,7 +5,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"io"
 	"math/rand"
 	"net/http"
@@ -13,9 +12,10 @@ import (
 	"sort"
 	"strconv"
 	"time"
+
+	"github.com/tcpadmin/netease-antispam-go/common"
 )
 
-var ErrBiz = errors.New("不支持的业务")
 var ErrHttpCode = errors.New("HTTP状态码非200")
 
 // IRequest 易盾的请求接口；不同的内容检查 url不同，签名计算方式不同，请求参数也不同
@@ -41,7 +41,12 @@ func PostForm(ctx context.Context, cfg *Config, request IRequest) ([]byte, error
 	consume := time.Since(now).Milliseconds()
 
 	if err != nil {
-		cfg.log.Error(ctx, "易盾PostForm错误", fmt.Sprintf("err:%#v", err), fmt.Sprintf("url:%s", request.ApiUrl()), fmt.Sprintf("参数:%s", paramsStr), fmt.Sprintf("耗时:%d", consume))
+		cfg.log.Error(ctx, "易盾PostForm错误",
+			common.LogField("err", err),
+			common.LogField("url", request.ApiUrl()),
+			common.LogField("参数", paramsStr),
+			common.LogField("耗时", consume),
+		)
 		return nil, err
 	}
 
@@ -50,28 +55,29 @@ func PostForm(ctx context.Context, cfg *Config, request IRequest) ([]byte, error
 
 	if resp.StatusCode != http.StatusOK {
 		cfg.log.Error(ctx, "易盾PostForm失败",
-			fmt.Sprintf("url:%s", request.ApiUrl()),
-			fmt.Sprintf("参数:%s", paramsStr),
-			fmt.Sprintf("响应:%#v", resp),
-			fmt.Sprintf("耗时:%d", consume))
+			common.LogField("url", request.ApiUrl()),
+			common.LogField("参数", paramsStr),
+			common.LogField("响应", resp),
+			common.LogField("耗时", consume),
+		)
 		return nil, ErrHttpCode
 	}
 
 	if err != nil {
 		cfg.log.Error(ctx, "易盾PostForm读响应错误",
-			fmt.Sprintf("err:%#v", err),
-			fmt.Sprintf("url:%s", request.ApiUrl()),
-			fmt.Sprintf("参数:%s", paramsStr),
-			fmt.Sprintf("响应:%#v", resp),
-			fmt.Sprintf("耗时:%d", consume))
+			common.LogField("err", err),
+			common.LogField("url", request.ApiUrl()),
+			common.LogField("参数", paramsStr),
+			common.LogField("响应", resp),
+			common.LogField("耗时", consume))
 		return nil, err
 	}
 
 	cfg.log.Info(ctx, "易盾PostForm",
-		fmt.Sprintf("url:%s", request.ApiUrl()),
-		fmt.Sprintf("参数:%s", paramsStr),
-		fmt.Sprintf("响应:%s", respBytes),
-		fmt.Sprintf("耗时:%d", consume))
+		common.LogField("url", request.ApiUrl()),
+		common.LogField("参数", paramsStr),
+		common.LogField("响应", string(respBytes)),
+		common.LogField("耗时", consume))
 	return respBytes, err
 }
 
