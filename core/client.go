@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"gitee.com/httpadmin/netease-antispam-go/common"
+	"github.com/tcpadmin/netease-antispam-go/common"
 )
 
 type Config struct {

@@ -6,9 +6,9 @@ import (
 	"net/url"
 	"testing"
 
-	"gitee.com/httpadmin/netease-antispam-go/audioCheck"
-	"gitee.com/httpadmin/netease-antispam-go/common"
-	"gitee.com/httpadmin/netease-antispam-go/core"
+	"github.com/tcpadmin/netease-antispam-go/audioCheck"
+	"github.com/tcpadmin/netease-antispam-go/common"
+	"github.com/tcpadmin/netease-antispam-go/core"
 )
 
 func TestAudioV2(t *testing.T) {

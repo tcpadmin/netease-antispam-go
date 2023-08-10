@@ -1,3 +1,3 @@
-module gitee.com/httpadmin/netease-antispam-go
+module github.com/tcpadmin/netease-antispam-go
 
 go 1.16

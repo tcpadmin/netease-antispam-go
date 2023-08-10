@@ -6,7 +6,7 @@ import (
 	"errors"
 	"net/url"
 
-	"gitee.com/httpadmin/netease-antispam-go/core"
+	"github.com/tcpadmin/netease-antispam-go/core"
 )
 
 type ClientV2 struct {
