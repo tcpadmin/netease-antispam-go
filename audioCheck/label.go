@@ -9,3 +9,9 @@ const (
 	LabelAd    = 200
 	LabelAdLaw = 260
 )
+
+const (
+	SuggestionOk        = 0 //通过
+	SuggestionSuspicion = 1 //嫌疑
+	SuggestionReject    = 2 //删除
+)
