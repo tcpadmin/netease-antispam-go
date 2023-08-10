@@ -1,9 +1,10 @@
 package core
 
 import (
-	"gitee.com/httpadmin/netease-antispam-go/common"
 	"net/http"
 	"time"
+
+	"gitee.com/httpadmin/netease-antispam-go/common"
 )
 
 type Config struct {
@@ -11,6 +12,10 @@ type Config struct {
 	secretKey string // 必填 key
 	log       common.ILogger
 	client    *http.Client
+}
+
+func (c *Config) SetLogLevel(level common.LogLevel) {
+	c.log.SetLogLevel(level)
 }
 
 type ConfigOption func(*Config)
@@ -27,7 +32,7 @@ func NewConfig(secretId, secretKey string, opts ...ConfigOption) *Config {
 	}
 	if c.log == nil {
 		log := &common.DefaultLog{}
-		log.LogMode(common.Silent)
+		log.SetLogLevel(common.Silent)
 		c.log = log
 	}
 	return c

@@ -18,9 +18,9 @@ const (
 	Info
 )
 
-// ILogger 实现该接口的日志；同 gorm
+// ILogger 实现该接口的日志；类似 gorm
 type ILogger interface {
-	LogMode(LogLevel) ILogger
+	SetLogLevel(LogLevel)
 	Info(context.Context, string, ...interface{})
 	Warn(context.Context, string, ...interface{})
 	Error(context.Context, string, ...interface{})
@@ -30,9 +30,8 @@ type DefaultLog struct {
 	level LogLevel
 }
 
-func (d *DefaultLog) LogMode(level LogLevel) ILogger {
+func (d *DefaultLog) SetLogLevel(level LogLevel) {
 	d.level = level
-	return d
 }
 
 func (d *DefaultLog) Info(ctx context.Context, s string, i ...interface{}) {

@@ -1,4 +1,3 @@
 module gitee.com/httpadmin/netease-antispam-go
 
-go 1.19
-
+go 1.16

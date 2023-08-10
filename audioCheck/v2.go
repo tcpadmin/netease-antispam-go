@@ -3,8 +3,10 @@ package audioCheck
 import (
 	"context"
 	"encoding/json"
-	"gitee.com/httpadmin/netease-antispam-go/core"
+	"errors"
 	"net/url"
+
+	"gitee.com/httpadmin/netease-antispam-go/core"
 )
 
 type ClientV2 struct {
@@ -31,6 +33,9 @@ func (c *ClientV2) Check(ctx context.Context, req *RequestV2) (*RespV2, error) {
 
 // CheckRaw 原生响应值，可自行用 gJson 处理（推荐）
 func (c *ClientV2) CheckRaw(ctx context.Context, req *RequestV2) ([]byte, error) {
+	if req.AudioUrl == "" {
+		return nil, errors.New("url不能为空")
+	}
 	req.bizId = c.bizId
 	respByte, err := core.PostForm(ctx, c.config, req)
 	if err != nil {
@@ -42,9 +47,13 @@ func (c *ClientV2) CheckRaw(ctx context.Context, req *RequestV2) ([]byte, error)
 type RequestV2 struct {
 	bizId string
 
-	AudioUrl string     //音频url
-	DataId   string     //唯一标识
-	Custom   url.Values //自定义数据
+	AudioUrl string //音频url
+	DataId   string //唯一标识
+
+	//其他参数和扩展参数（用户扩展参数 设备扩展参数）
+	//扩展参数在内容安全业务中，是通用的 https://support.dun.163.com/documents/588434200783982592?docId=476559002902757376
+	//有些自定义扩展参数，易盾对接各个甲方时使用的有可能使用不同的字段名称，以自行商定为准。也放在这里。
+	Extra url.Values
 }
 
 func NewRequestV2(audioUrl, dataId string) *RequestV2 {
@@ -62,10 +71,14 @@ func (c *RequestV2) PostData() url.Values {
 
 	//独有参数
 	postData.Set("version", "v2")
+	postData.Set("url", c.AudioUrl)
+	if c.DataId != "" {
+		postData.Set("dataId", c.DataId)
+	}
 
 	//追加自定义参数
-	if c.Custom != nil && len(c.Custom) != 0 {
-		for k, v := range c.Custom {
+	if c.Extra != nil && len(c.Extra) != 0 {
+		for k, v := range c.Extra {
 			postData[k] = v
 		}
 	}

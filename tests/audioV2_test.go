@@ -3,14 +3,26 @@ package tests
 import (
 	"context"
 	"fmt"
-	"gitee.com/httpadmin/netease-antispam-go/audioCheck"
-	"gitee.com/httpadmin/netease-antispam-go/core"
+	"net/url"
 	"testing"
+
+	"gitee.com/httpadmin/netease-antispam-go/audioCheck"
+	"gitee.com/httpadmin/netease-antispam-go/common"
+	"gitee.com/httpadmin/netease-antispam-go/core"
 )
 
 func TestAudioV2(t *testing.T) {
+	extra := url.Values{}
+	extra.Set("ip", "1.2.3.4")
+	extra.Set("phone", "13800000000")
+	extra.Set("isPremiumUse", "0")
 	cfg := core.NewConfig("123", "456", core.WithTimeout(0)) //不设超时
-	audioV2Client := audioCheck.NewClientV2(cfg, "sss")
-	resp, err := audioV2Client.Check(context.Background(), &audioCheck.RequestV2{})
+	cfg.SetLogLevel(common.Info)
+	audioV2Client := audioCheck.NewClientV2(cfg, "123456789")
+	req := &audioCheck.RequestV2{
+		AudioUrl: "https://test.test.com/test.m4a",
+		Extra:    extra,
+	}
+	resp, err := audioV2Client.Check(context.Background(), req)
 	fmt.Println(resp, err)
 }

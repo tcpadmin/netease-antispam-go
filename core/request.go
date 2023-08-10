@@ -70,7 +70,7 @@ func PostForm(ctx context.Context, cfg *Config, request IRequest) ([]byte, error
 	cfg.log.Info(ctx, "易盾PostForm",
 		fmt.Sprintf("url:%s", request.ApiUrl()),
 		fmt.Sprintf("参数:%s", paramsStr),
-		fmt.Sprintf("响应:%#v", resp),
+		fmt.Sprintf("响应:%s", respBytes),
 		fmt.Sprintf("耗时:%d", consume))
 	return respBytes, err
 }
