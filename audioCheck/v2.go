@@ -11,7 +11,7 @@ import (
 
 type ClientV2 struct {
 	config *core.Config
-	bizId  string
+	bizId  string //全局通用，也可以在后续请求中指定
 }
 
 func NewClientV2(cfg *core.Config, bizId string) *ClientV2 {
@@ -36,7 +36,11 @@ func (c *ClientV2) CheckRaw(ctx context.Context, req *RequestV2) ([]byte, error)
 	if req.AudioUrl == "" {
 		return nil, errors.New("url不能为空")
 	}
-	req.bizId = c.bizId
+
+	if req.BizId == "" {
+		req.BizId = c.bizId
+	}
+
 	respByte, err := core.PostForm(ctx, c.config, req)
 	if err != nil {
 		return nil, err
@@ -45,7 +49,7 @@ func (c *ClientV2) CheckRaw(ctx context.Context, req *RequestV2) ([]byte, error)
 }
 
 type RequestV2 struct {
-	bizId string
+	BizId string //非必传；如果没有赋值，会用 client 中的字段赋值；这个字段是为了方便在请求中灵活调整 bizId；
 
 	AudioUrl string //音频url
 	DataId   string //唯一标识
@@ -67,7 +71,7 @@ func (c *RequestV2) ApiUrl() string {
 func (c *RequestV2) PostData() url.Values {
 	postData := url.Values{}
 	//公共参数；其他参数在postForm中处理
-	postData.Set("businessId", c.bizId)
+	postData.Set("businessId", c.BizId)
 
 	//独有参数
 	postData.Set("version", "v2")

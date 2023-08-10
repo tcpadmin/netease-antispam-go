@@ -16,6 +16,8 @@ import (
 	"github.com/tcpadmin/netease-antispam-go/common"
 )
 
+var ErrBiz = errors.New("业务id为空")
+
 var ErrHttpCode = errors.New("HTTP状态码非200")
 
 // IRequest 易盾的请求接口；不同的内容检查 url不同，签名计算方式不同，请求参数也不同
@@ -27,6 +29,10 @@ type IRequest interface {
 // PostForm 使用 form 表单的方式请求，目前内容安全相关接口都是该方式
 func PostForm(ctx context.Context, cfg *Config, request IRequest) ([]byte, error) {
 	postData := request.PostData()
+	if postData.Get("businessId") == "" {
+		return nil, ErrBiz
+	}
+
 	//设置公共参数
 	now := time.Now()
 	postData.Set("secretId", cfg.secretID)
