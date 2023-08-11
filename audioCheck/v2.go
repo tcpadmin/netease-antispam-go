@@ -1,5 +1,8 @@
 package audioCheck
 
+// 音频检测
+// 接口文档：https://support.dun.163.com/documents/588434426518708224?docId=588884842603749376
+
 import (
 	"context"
 	"encoding/json"
