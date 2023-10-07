@@ -1,5 +1,8 @@
 # 易盾 - 内容安全/反垃圾 - go-sdk
 
+备注：
+- 图片审核结果和其他的不同。根目录就是 antispam
+
 ## 业务说明
 - 不用于反作弊，不用于智能风控，只用于内容安全
 - 一般情况下，一个账户开通的所有业务共享 secretId 和 secretKey， 但是使用不同的业务ID（businessId）
@@ -59,5 +62,5 @@ fmt.Println(resp, err)
   - 同步检测 https://support.dun.163.com/documents/588434277524447232?docId=791822473634779136
 
 文本检测
-- 文本接口 - todo
+- 文本接口 - done
   - 单次同步 https://support.dun.163.com/documents/588434200783982592?docId=791131792583602176
